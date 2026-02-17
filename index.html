@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benimle Çıkar mısın?</title>
+    <title>Beni Affet :(</title>
     <style>
         body {
             display: flex;
@@ -12,48 +12,91 @@
             justify-content: center;
             height: 100vh;
             font-family: 'Arial', sans-serif;
-            background-color: #ffe6e6;
+            background-color: #fce4ec;
             margin: 0;
             overflow: hidden;
+            text-align: center;
         }
-        h1 { color: #d63384; text-align: center; }
-        .buttons { margin-top: 20px; position: relative; width: 300px; height: 100px; }
+        h1 { color: #880e4f; transition: 0.3s; }
+        .buttons { margin-top: 50px; position: relative; width: 100%; height: 300px; }
         button {
             padding: 15px 30px;
             font-size: 1.2rem;
             cursor: pointer;
             border: none;
-            border-radius: 10px;
-            transition: 0.3s;
+            border-radius: 50px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        #yesBtn { background-color: #28a745; color: white; margin-right: 10px; }
-        #noBtn {
-            background-color: #dc3545;
-            color: white;
+        #yesBtn { background-color: #4caf50; color: white; position: relative; z-index: 10; }
+        #noBtn { background-color: #f44336; color: white; position: absolute; }
+        .heart {
+            color: #ff1744;
+            font-size: 100px;
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            animation: pulse 1s infinite;
         }
-        img { width: 200px; border-radius: 15px; }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.3); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
     </style>
 </head>
 <body>
 
-    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndW13YXp4bm16Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat">
-    <h1>14 Şubat'ta benimle yemeğe çıkar mısın? ❤️</h1>
+    <div id="main-content">
+        <img id="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndW13YXp4bm16Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9iZCZjdD1z/cLS1cfxvGOPVpf9g3y/giphy.gif" width="200">
+        <h1 id="question">Beni affeder misin? 🥺</h1>
 
-    <div class="buttons">
-        <button id="yesBtn" onclick="alert('Yaşasın! Konumu gönderiyorum! 😍')">Evet</button>
-        <button id="noBtn" onmouseover="moveButton()">Hayır</button>
+        <div class="buttons">
+            <button id="yesBtn" onclick="celebrate()">Evet</button>
+            <button id="noBtn" onmouseover="moveAndGrow()">Hayır</button>
+        </div>
     </div>
 
+    <div id="heart" class="heart">❤️</div>
+
     <script>
-        function moveButton() {
-            const btn = document.getElementById('noBtn');
-            // Butonun ekran dışına taşmaması için rastgele konum hesaplama
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+        let yesSize = 1.2;
+        let yesPadding = 15;
+
+        function moveAndGrow() {
+            // Hayır butonunu kaçır
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Evet butonunu büyüt
+            const yesBtn = document.getElementById('yesBtn');
+            yesSize += 0.3; // Her kaçışta font büyüklüğünü artır
+            yesPadding += 5; // Butonun boyutunu artır
+            yesBtn.style.fontSize = yesSize + "rem";
+            yesBtn.style.padding = yesPadding + "px " + (yesPadding * 2) + "px";
             
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+            // Başlığı biraz daha duygusal yapalım :)
+            if(yesSize > 3) {
+                document.getElementById('question').innerText = "Lütfen artık Evet de... 🥺";
+            }
+        }
+
+        function celebrate() {
+            // Her şeyi gizle ve kalbi göster
+            document.getElementById('main-content').style.display = 'none';
+            const heart = document.getElementById('heart');
+            heart.style.display = 'block';
+            document.body.style.backgroundColor = "#ffcdd2";
+            
+            // Küçük bir kutlama mesajı
+            setTimeout(() => {
+                alert("Seni çok seviyorum! ❤️");
+            }, 500);
         }
     </script>
 </body>
