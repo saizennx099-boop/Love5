@@ -13,76 +13,73 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at top, #0f0c29, #1b0033, #000000);
-    color: white;
+    background: radial-gradient(circle, #3b0000, #120000, #000000);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+    color: white;
 }
 
-/* Yıldız efekti */
-body::before {
-    content: "";
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: url("https://www.transparenttextures.com/patterns/stardust.png");
-    animation: stars 60s linear infinite;
-    opacity: 0.3;
+/* Uçuşan kalpler */
+.heart {
+    position: fixed;
+    color: red;
+    font-size: 20px;
+    animation: floatUp linear infinite;
 }
 
-@keyframes stars {
-    from { transform: translateY(0); }
-    to { transform: translateY(-1000px); }
+@keyframes floatUp {
+    from {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
 }
 
 .container {
     position: relative;
-    z-index: 2;
-    background: rgba(255,255,255,0.05);
-    padding: 50px;
+    background: rgba(255,0,0,0.1);
+    padding: 60px;
     border-radius: 25px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 40px rgba(0,0,255,0.4);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 50px red;
     max-width: 500px;
 }
 
 h1 {
-    font-size: 30px;
+    font-size: 32px;
     margin-bottom: 20px;
+    text-shadow: 0 0 20px red;
 }
 
-#question {
-    font-size: 22px;
+h2 {
     margin-bottom: 40px;
-    min-height: 30px;
-}
-
-.buttons {
-    position: relative;
-    height: 80px;
 }
 
 button {
-    padding: 14px 35px;
+    padding: 15px 40px;
     font-size: 18px;
     border: none;
     border-radius: 40px;
     cursor: pointer;
     transition: 0.3s;
-    position: absolute;
+    position: relative;
 }
 
 .yes {
-    background: linear-gradient(45deg, #00c6ff, #0072ff);
-    left: 30%;
-    box-shadow: 0 0 20px #0072ff;
+    background: linear-gradient(45deg, #ff0000, #990000);
+    color: white;
+    box-shadow: 0 0 30px red;
 }
 
 .no {
-    background: linear-gradient(45deg, #ff0000, #990000);
-    left: 55%;
+    background: #330000;
+    color: white;
+    margin-left: 30px;
 }
 
 button:hover {
@@ -91,30 +88,13 @@ button:hover {
 
 .result {
     display: none;
-    margin-top: 20px;
-    animation: fadeIn 2s ease forwards;
+    margin-top: 30px;
 }
 
 .result img {
     width: 220px;
     margin-top: 20px;
-    animation: glow 2s infinite alternate;
-}
-
-@keyframes glow {
-    from { filter: drop-shadow(0 0 5px #00f); }
-    to { filter: drop-shadow(0 0 25px #00f); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-#timer {
-    margin-top: 20px;
-    font-size: 14px;
-    opacity: 0.8;
+    box-shadow: 0 0 40px red;
 }
 </style>
 </head>
@@ -123,69 +103,60 @@ button:hover {
 
 <div class="container">
     <h1>Sana Bir Şey Söylemem Lazım...</h1>
-    <div id="question"></div>
+    <h2>Beni affeder misin? ❤️</h2>
 
-    <div class="buttons">
-        <button class="yes" onclick="acceptLove()">Evet 💙</button>
-        <button class="no" id="noBtn">Hayır</button>
-    </div>
+    <button class="yes" onclick="acceptLove()">Evet ❤️</button>
+    <button class="no" id="noBtn">Hayır</button>
 
     <div class="result" id="result">
-        <h2>Seni Çok Seviyorum 💙</h2>
-        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
-        <div id="timer"></div>
+        <h2>Seni Çok Seviyorum ❤️</h2>
+        <img src="ask.gif">
     </div>
 </div>
 
-<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b3f7cdb0d.mp3?filename=romantic-ambient-110624.mp3">
+</audio>
 
 <script>
 
-/* Daktilo efekti */
-const text = "Beni affeder misin?";
-let i = 0;
-function typeWriter() {
-    if (i < text.length) {
-        document.getElementById("question").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 70);
-    }
-}
-typeWriter();
+/* Arka planda kalpler */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    document.body.appendChild(heart);
 
-/* Hayır butonu kaçma */
+    setTimeout(() => {
+        heart.remove();
+    }, 5000);
+}
+setInterval(createHeart, 300);
+
+/* Hayır kaçma */
 const noBtn = document.getElementById("noBtn");
 
-function moveButton() {
-    const x = Math.random() * (window.innerWidth - 200);
-    const y = Math.random() * (window.innerHeight - 100);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-}
-
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("click", moveButton);
+noBtn.addEventListener("mouseover", () => {
+    noBtn.style.position = "absolute";
+    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+});
 
 /* Evet */
 function acceptLove() {
-    document.querySelector(".buttons").style.display = "none";
     document.getElementById("result").style.display = "block";
     document.getElementById("music").play();
+    heartExplosion();
 }
 
-/* Tanışma süresi (Tarihi değiştir!) */
-const startDate = new Date("2024-01-01"); // BURAYI DEĞİŞTİR
-function updateTimer() {
-    const now = new Date();
-    const diff = now - startDate;
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    document.getElementById("timer").innerHTML =
-        days + " gündür seni seviyorum 💙";
+/* Kalp patlaması */
+function heartExplosion() {
+    for(let i=0;i<50;i++){
+        setTimeout(createHeart, i*50);
+    }
 }
-setInterval(updateTimer, 1000);
-updateTimer();
-
 </script>
 
 </body>
